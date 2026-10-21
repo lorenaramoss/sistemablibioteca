@@ -2,7 +2,7 @@
 
 ## Objetivo e escopo
 
-O sistema apoia as atividades básicas de uma biblioteca: autenticação demonstrativa de bibliotecário, consulta e cadastro de livros e acompanhamento de empréstimos. O protótipo atual é executado no navegador e mantém os dados localmente. A persistência PostgreSQL descrita em `database/biblioteca.sql` representa o modelo previsto para uma versão com servidor.
+O sistema apoia as atividades básicas de uma biblioteca: autenticação de bibliotecário, consulta e cadastro de livros e acompanhamento de empréstimos. A interface web usa uma API ASP.NET Core para autenticar usuários e persistir os dados no PostgreSQL.
 
 ## Atores
 
@@ -28,7 +28,7 @@ O sistema apoia as atividades básicas de uma biblioteca: autenticação demonst
 | RF-12 | O sistema deve listar empréstimos ativos e devolvidos com leitor, livro, data de empréstimo, vencimento e situação. | Alta |
 | RF-13 | O sistema deve permitir registrar a devolução de um empréstimo ativo e atualizar a disponibilidade do acervo. | Alta |
 | RF-14 | O sistema deve identificar empréstimos vencidos que ainda não foram devolvidos. | Média |
-| RF-15 | O sistema deve preservar livros e empréstimos cadastrados entre recargas da página no mesmo navegador. | Média |
+| RF-15 | O sistema deve persistir livros e empréstimos no PostgreSQL, permitindo consultar os mesmos registros em sessões e navegadores autorizados. | Alta |
 
 ## Regras de negócio
 
@@ -38,7 +38,7 @@ O sistema apoia as atividades básicas de uma biblioteca: autenticação demonst
 4. A data prevista de devolução deve ser posterior à data do empréstimo.
 5. Um empréstimo devolvido não pode ser devolvido novamente.
 6. A disponibilidade é calculada como exemplares totais menos empréstimos ativos.
-7. O acesso com credencial fixa na interface existe apenas para demonstração; uma versão de produção deve autenticar no servidor.
+7. A senha deve ser verificada no servidor; a credencial inicial fornecida pelo script é exclusiva para desenvolvimento e deve ser alterada antes da implantação.
 
 ## Requisitos não funcionais relacionados
 
@@ -46,4 +46,4 @@ O sistema apoia as atividades básicas de uma biblioteca: autenticação demonst
 - A navegação e os formulários devem ser utilizáveis por teclado.
 - Mensagens de validação e confirmação devem ser apresentadas em português.
 - Dados pessoais de leitores não devem ser enviados a terceiros.
-- O protótipo não é adequado para uso em produção sem backend, controle de acesso e persistência segura.
+- O sistema exige backend e banco de dados disponíveis; sessões e operações de dados devem ser protegidas no servidor.

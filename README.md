@@ -1,50 +1,93 @@
 # Biblioteca Horizonte
 
-Sistema demonstrativo de biblioteca para cadastro e consulta de livros e gestão de empréstimos. A interface funciona no navegador sem dependências externas e salva os dados de demonstração no `localStorage` do navegador.
+Sistema de gestão de biblioteca com interface web, API ASP.NET Core 8 e PostgreSQL.
 
-## Executar
+## Executar localmente
 
-Abra `index.html` em um navegador moderno. Para testar a autenticação, use:
+1. Instale o **.NET 8 SDK** e o **PostgreSQL 14 ou superior**.
+2. Crie o banco, as tabelas e os dados iniciais:
 
-- **Usuário:** `bibliotecario`
-- **Senha:** `Leitura123!`
+   ```powershell
+   psql -U postgres -f database/biblioteca.sql
+   ```
 
-Após entrar, use o menu lateral para consultar o painel, cadastrar livros e registrar ou devolver empréstimos. Os dados ficam apenas no navegador em uso; o script PostgreSQL em `database/biblioteca.sql` é a base para uma futura integração com servidor.
+3. Na raiz do projeto, configure a conexão do banco na sessão atual do PowerShell:
 
-> **Aviso:** autenticação e persistência no navegador são exclusivamente demonstrativas. Não use este protótipo para armazenar dados reais nem exponha credenciais de produção no código do cliente.
+   ```powershell
+   $env:PATH = "$env:USERPROFILE\.dotnet;$env:PATH"
+   $env:BIBLIOTECA_DB = "Host=localhost;Port=5432;Database=biblioteca_horizonte;Username=postgres;Password=SUA_SENHA"
+   dotnet run --project Biblioteca.Api.csproj
+   ```
 
-## Entregáveis
+   A primeira linha também permite usar o SDK instalado no perfil do usuário; se o .NET SDK já estiver no `PATH`, ela é inofensiva.
 
-1. [Requisitos funcionais (Word)](docs/REQUISITOS_FUNCIONAIS.docx) e [versão-fonte em Markdown](docs/REQUISITOS_FUNCIONAIS.md)
-2. [Diagrama entidade-relacionamento (SVG)](docs/DER.svg)
-3. [Criação e população do banco de dados](database/biblioteca.sql)
-4. [Casos de teste de software](docs/CASOS_DE_TESTE.md)
-5. [Requisitos de infraestrutura](docs/INFRAESTRUTURA.md)
-6. Interface de autenticação e telas do sistema: `index.html`, `styles.css` e `app.js`
+4. Abra no navegador o endereço HTTPS/HTTP que o `dotnet run` informar. A página e a API são hospedadas na mesma origem.
 
-## Banco de dados
+O usuário inicial do banco é `bibliotecario@biblioteca.local`, com a senha demonstrativa `Leitura123!`. Para entrar na interface, informe `bibliotecario` e essa senha. Altere/remova a credencial inicial antes de disponibilizar qualquer ambiente fora da máquina local.
 
-O script foi escrito para PostgreSQL 14 ou superior. Execute com uma conta autorizada a criar o banco:
+> Não abra `wwwroot/index.html` diretamente como arquivo: a interface precisa acessar a API hospedada pelo backend.
 
-```powershell
-psql -U postgres -f database/biblioteca.sql
+## API
+
+Todas as operações do acervo exigem uma sessão autenticada. O login cria um cookie de sessão `HttpOnly`, `SameSite=Strict`, com expiração após 30 minutos de inatividade. As alterações de livros e empréstimos são persistidas no PostgreSQL.
+
+| Método | Rota | Acesso | Descrição |
+|---|---|---|---|
+| `GET` | `/api/health` | Público | Confere a conexão com o banco. |
+| `POST` | `/api/auth/login` | Público | Autentica com usuário/senha e inicia a sessão. |
+| `GET` | `/api/auth/me` | Sessão | Retorna o usuário da sessão atual. |
+| `POST` | `/api/auth/logout` | Sessão | Encerra a sessão. |
+| `GET` | `/api/categories` | Sessão | Lista categorias cadastradas. |
+| `GET` | `/api/books?search=texto` | Sessão | Lista/pesquisa livros e disponibilidade. |
+| `POST` | `/api/books` | Sessão | Cadastra livro; valida ISBN e exemplares. |
+| `GET` | `/api/loans?status=ativo` | Sessão | Lista empréstimos; filtro opcional `ativo` ou `devolvido`. |
+| `POST` | `/api/loans` | Sessão | Registra empréstimo de exemplar disponível. |
+| `POST` | `/api/loans/{id}/return` | Sessão | Registra devolução de empréstimo ativo. |
+
+Exemplo de autenticação:
+
+```json
+{
+  "username": "bibliotecario",
+  "password": "Leitura123!"
+}
 ```
 
-O script cria o banco `biblioteca_horizonte`, as tabelas, uma visão de disponibilidade e registros iniciais. A senha do usuário de demonstração no banco é gerada como hash com `pgcrypto`; não é a autenticação da interface estática.
+Exemplo para cadastrar um livro:
+
+```json
+{
+  "title": "Livro de exemplo",
+  "author": "Autoria de exemplo",
+  "category": "Literatura",
+  "isbn": "9781234567890",
+  "copies": 2
+}
+```
 
 ## Estrutura
 
 ```text
 .
-├── app.js
+├── Biblioteca.Api.csproj
+├── Program.cs
 ├── database/
 │   └── biblioteca.sql
 ├── docs/
+│   ├── API.md
 │   ├── CASOS_DE_TESTE.md
 │   ├── DER.svg
 │   ├── INFRAESTRUTURA.md
 │   └── REQUISITOS_FUNCIONAIS.md
-├── index.html
-├── README.md
-└── styles.css
+└── wwwroot/
+    ├── app.js
+    ├── index.html
+    └── styles.css
 ```
+
+## Segurança e limites
+
+- A senha inicial é apenas para desenvolvimento; troque-a antes de usar dados reais.
+- A senha é verificada pelo PostgreSQL com `pgcrypto`; credenciais do banco devem ficar em variável de ambiente/cofre e nunca no repositório.
+- O login limita tentativas por endereço IP. Sessões e operações sensíveis são validadas no backend.
+- Configure HTTPS e armazenamento compartilhado/seguro para sessões ao implantar múltiplas instâncias. A sessão em memória é própria para desenvolvimento e invalida sessões quando o processo reinicia.

@@ -1,21 +1,23 @@
 # Requisitos de infraestrutura
 
-## Ambiente mínimo para executar o protótipo
+## Ambiente local da aplicação
 
 | Componente | Requisito |
 |---|---|
-| Cliente | Navegador atualizado com suporte a HTML5, CSS Grid, JavaScript ES6 e `localStorage` (Chrome, Edge, Firefox ou Safari atuais). |
+| Cliente | Navegador atualizado com suporte a HTML5, CSS Grid, JavaScript ES6 e cookies de sessão (Chrome, Edge, Firefox ou Safari atuais). |
 | Dispositivo | Desktop, tablet ou celular; viewport mínimo recomendado de 320 px. |
-| Hospedagem | Qualquer servidor estático HTTPS (por exemplo, GitHub Pages, Nginx ou hospedagem equivalente); também é possível abrir `index.html` localmente. |
-| Dependências | Nenhuma biblioteca ou serviço externo para as telas demonstrativas. |
-| Armazenamento do protótipo | `localStorage` do navegador; os dados são isolados por navegador e origem e podem ser apagados pelo usuário. |
+| Backend | .NET 8 SDK para desenvolvimento; a aplicação usa ASP.NET Core e Npgsql para acessar o banco. |
+| Banco de dados | PostgreSQL 14 ou superior, com extensão `pgcrypto` habilitada pelo script. |
+| Hospedagem | Backend ASP.NET Core; a aplicação serve a interface estática de `wwwroot` e as rotas `/api` na mesma origem. |
+| Segredos | `BIBLIOTECA_DB` configurada no ambiente do servidor; não manter a connection string no frontend ou no Git. |
+| Sessões | Cache de sessão em memória para desenvolvimento local; exige armazenamento distribuído e chaves compartilhadas ao escalar para várias instâncias. |
 
-## Ambiente previsto para uma versão integrada
+## Ambiente de produção
 
 | Componente | Requisito recomendado |
 |---|---|
-| Banco de dados | PostgreSQL 14 ou superior, com extensão `pgcrypto` habilitada para o hash de senha da carga inicial. |
-| Servidor de aplicação | API HTTPS em ambiente suportado pela equipe, com autenticação e autorização verificadas no servidor. |
+| Banco de dados | PostgreSQL 14 ou superior, com extensão `pgcrypto` habilitada para a verificação da senha. |
+| Servidor de aplicação | ASP.NET Core 8 com API e frontend hospedados na mesma origem, atrás de HTTPS válido. |
 | Rede | TLS válido, acesso ao banco restrito ao servidor da aplicação e firewall permitindo somente portas necessárias. |
 | Segredos | Credenciais de banco e chaves armazenadas em cofre/variáveis seguras, nunca no frontend ou no repositório. |
 | Backup | Backup automatizado e política de retenção definida; testar restauração periodicamente. |
@@ -23,4 +25,4 @@
 
 ## Limites e segurança
 
-Esta entrega contém apenas frontend estático e script de banco, não contém API, implantação de banco nem pipeline de CI/CD. A autenticação fixa e a persistência local servem para demonstração e não oferecem controle de acesso real, sincronização entre usuários, backup ou proteção de dados. Para uso real, implementar backend com hash de senha seguro, sessões protegidas, validação no servidor, autorização, HTTPS, política de privacidade e gestão de backup.
+O backend incluído usa sessão em memória e um usuário inicial de demonstração. Troque a senha inicial, use HTTPS, configure armazenamento compartilhado de sessão antes de executar múltiplas instâncias e aplique gestão de segredos, backup e política de privacidade antes do uso real.

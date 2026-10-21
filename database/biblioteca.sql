@@ -63,6 +63,8 @@ CREATE INDEX IF NOT EXISTS idx_emprestimos_status_vencimento
     ON emprestimos (status, data_prevista_devolucao);
 CREATE INDEX IF NOT EXISTS idx_emprestimos_livro_status
     ON emprestimos (livro_id, status);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_livros_isbn_normalizado
+    ON livros (regexp_replace(upper(isbn), '[^0-9X]', '', 'g'));
 
 CREATE OR REPLACE VIEW vw_livros_disponibilidade AS
 SELECT
@@ -91,7 +93,7 @@ ON CONFLICT (nome) DO NOTHING;
 
 INSERT INTO usuarios (nome, email, senha_hash, perfil) VALUES
     ('Bibliotecário de Demonstração', 'bibliotecario@biblioteca.local',
-     crypt('Leitura123!', gen_salt('bf')), 'administrador')
+     crypt('Leitura123!', gen_salt('bf', 12)), 'administrador')
 ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO livros (categoria_id, titulo, autor, isbn, ano_publicacao, exemplares_totais)

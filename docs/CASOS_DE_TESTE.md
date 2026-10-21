@@ -1,6 +1,6 @@
 # Casos de teste de software
 
-Os casos abaixo descrevem validações manuais para a interface do protótipo. Antes de cada caso, abra `index.html`; quando necessário, use **Sair** e entre novamente com `bibliotecario` / `Leitura123!`. A persistência de teste é local ao navegador.
+Os casos abaixo descrevem validações manuais para a aplicação. Inicie o backend e o PostgreSQL conforme o `README.md`; abra a URL informada por `dotnet run`. Use `bibliotecario` / `Leitura123!` para o usuário inicial de demonstração. Não use essa senha fora do desenvolvimento.
 
 | ID | Cenário | Pré-condições | Passos | Resultado esperado |
 |---|---|---|---|---|
@@ -9,7 +9,7 @@ Os casos abaixo descrevem validações manuais para a interface do protótipo. A
 | CT-03 | Encerrar sessão | Usuário autenticado | Selecionar **Sair**. | Tela de login reaparece e as telas internas deixam de ser acessíveis pela navegação. |
 | CT-04 | Exibir indicadores | Usuário autenticado; dados de demonstração carregados | Abrir **Visão geral**. | Indicadores de títulos, exemplares disponíveis, empréstimos ativos e atrasados são apresentados. |
 | CT-05 | Pesquisar livro | Há livros no catálogo | Abrir **Acervo** e pesquisar por parte do título ou autor. | A lista mostra apenas resultados correspondentes; ao limpar a busca, todos os livros voltam a aparecer. |
-| CT-06 | Cadastrar livro válido | ISBN ainda não cadastrado | Abrir **Acervo**, preencher todos os campos válidos e salvar. | Livro é incluído na lista e continua presente após recarregar a página. |
+| CT-06 | Cadastrar livro válido | ISBN ainda não cadastrado | Abrir **Acervo**, preencher todos os campos válidos e salvar. | Livro é incluído no banco e continua presente após recarregar a página ou entrar por outro navegador. |
 | CT-07 | Rejeitar campos inválidos | Formulário de livro aberto | Tentar salvar campos obrigatórios vazios ou quantidade igual a zero. | Formulário não é salvo e os campos inválidos são indicados. |
 | CT-08 | Impedir ISBN duplicado | Livro com o ISBN informado já existe | Tentar cadastrar outro livro com o mesmo ISBN. | Cadastro é rejeitado com mensagem; nenhum duplicado aparece. |
 | CT-09 | Abrir empréstimo | Existe pelo menos um exemplar disponível | Abrir **Empréstimos**, informar leitor, livro e vencimento futuro; salvar. | Empréstimo ativo aparece na lista e a disponibilidade do livro diminui em um exemplar. |
@@ -23,5 +23,5 @@ Os casos abaixo descrevem validações manuais para a interface do protótipo. A
 
 - CT-01 a CT-03 devem passar para considerar o fluxo de sessão demonstrativo utilizável.
 - CT-06, CT-08, CT-09 e CT-11 devem passar para considerar os fluxos principais de acervo e empréstimo.
-- Nenhum teste deve perder dados locais durante uma simples recarga da mesma origem/navegador.
+- Os registros criados devem permanecer no PostgreSQL após uma recarga e estar visíveis em outro navegador autorizado.
 - Executar também CT-14 em ao menos um navegador móvel ou emulador responsivo.

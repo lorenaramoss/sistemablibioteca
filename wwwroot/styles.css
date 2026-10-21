@@ -1,4 +1,4 @@
-:root{font-family:"DM Sans",Arial,sans-serif;color:#24332e;background:#f6f8f7;font-synthesis:none;text-rendering:optimizeLegibility;--green:#234b43;--green-dark:#183d35;--mint:#eaf1ed;--muted:#78847f;--line:#e8ece9;--gold:#c8934d}
+:root{font-family:Arial,sans-serif;color:#24332e;background:#f6f8f7;font-synthesis:none;text-rendering:optimizeLegibility;--green:#234b43;--green-dark:#183d35;--mint:#eaf1ed;--muted:#78847f;--line:#e8ece9;--gold:#c8934d}
 *{box-sizing:border-box}
 body{margin:0;min-width:320px;min-height:100vh}
 button,input,select{font:inherit}
