@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#183d35">
+  <meta name="description" content="Sistema demonstrativo de gestão de biblioteca.">
+  <title>Biblioteca Horizonte</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main id="login-view" class="login-shell">
+    <section class="login-card" aria-labelledby="login-title">
+      <div class="brand-mark" aria-hidden="true">B</div>
+      <p class="eyebrow">BIBLIOTECA HORIZONTE</p>
+      <h1 id="login-title">Bem-vindo de volta</h1>
+      <p class="muted">Entre para continuar sua rotina de leitura e cuidado com o acervo.</p>
+      <form id="login-form" class="form-stack">
+        <label for="username">Usuário</label>
+        <input id="username" name="username" autocomplete="username" required placeholder="Seu usuário">
+        <label for="password">Senha</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Sua senha">
+        <p id="login-error" class="form-error" role="alert" hidden></p>
+        <button class="button button-primary button-wide" type="submit">Entrar no sistema <span aria-hidden="true">→</span></button>
+      </form>
+      <div class="demo-hint"><strong>Acesso demonstrativo</strong><br>Usuário: bibliotecario · Senha: Leitura123!</div>
+    </section>
+    <aside class="login-art" aria-label="Apresentação da biblioteca">
+      <div class="art-content">
+        <span class="art-kicker">UM ESPAÇO PARA DESCOBRIR</span>
+        <h2>Histórias que<br>nos levam mais longe.</h2>
+        <p>Organize o acervo, acompanhe empréstimos e mantenha cada leitura em movimento.</p>
+        <div class="art-lines" aria-hidden="true"><i></i><i></i><i></i></div>
+      </div>
+      <span class="art-caption">Conhecimento compartilhado transforma.</span>
+    </aside>
+  </main>
+
+  <div id="application" class="app-shell" hidden>
+    <aside class="sidebar">
+      <a class="brand" href="#" data-view="dashboard" aria-label="Biblioteca Horizonte, início">
+        <span class="brand-mark brand-mark-small" aria-hidden="true">B</span>
+        <span><strong>Horizonte</strong><small>GESTÃO DE BIBLIOTECA</small></span>
+      </a>
+      <p class="nav-label">MENU PRINCIPAL</p>
+      <nav class="main-nav" aria-label="Menu principal">
+        <button class="nav-item active" type="button" data-view="dashboard"><span class="nav-icon">⌂</span>Visão geral</button>
+        <button class="nav-item" type="button" data-view="books"><span class="nav-icon">▤</span>Acervo</button>
+        <button class="nav-item" type="button" data-view="loans"><span class="nav-icon">↗</span>Empréstimos</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note"><span class="note-icon">✦</span><p><strong>Um bom livro muda tudo.</strong><br>Cuide do acervo, inspire novas histórias.</p></div>
+        <button id="logout-button" class="logout-button" type="button"><span>↪</span> Sair da conta</button>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>Biblioteca</span><span class="crumb-divider">/</span><strong id="page-crumb">Visão geral</strong></div>
+        <div class="user-chip"><span class="avatar">B</span><span><strong>Bibliotecário</strong><small>Administrador</small></span></div>
+      </header>
+      <main id="content" class="content" tabindex="-1"></main>
+      <footer class="footer">Biblioteca Horizonte <span>·</span> Conhecimento compartilhado transforma.</footer>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

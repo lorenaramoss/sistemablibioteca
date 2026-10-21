@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="650" viewBox="0 0 1040 650" role="img" aria-labelledby="title desc">
+  <title id="title">Diagrama entidade-relacionamento da Biblioteca Horizonte</title>
+  <desc id="desc">Relacionamentos entre usuários, livros, categorias e empréstimos.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f6f8fb}.entity{fill:#fff;stroke:#234b43;stroke-width:2;rx:12}.head{fill:#234b43}.name{fill:#fff;font:700 18px Arial,sans-serif}.field{fill:#263630;font:14px Arial,sans-serif}.label{fill:#52645d;font:12px Arial,sans-serif}.line{stroke:#55766e;stroke-width:2;fill:none}.card{filter:drop-shadow(0 4px 8px #172d2618)}
+    </style>
+  </defs>
+  <rect class="bg" width="1040" height="650" rx="18"/>
+  <text x="40" y="48" fill="#183d35" font-family="Arial,sans-serif" font-size="25" font-weight="700">Biblioteca Horizonte · Modelo entidade-relacionamento</text>
+  <text x="40" y="73" fill="#61716c" font-family="Arial,sans-serif" font-size="14">Cardinalidades: 1:N · disponibilidade = exemplares totais − empréstimos ativos</text>
+
+  <path class="line" d="M300 200 H400"/><text class="label" x="330" y="188">1 : N</text>
+  <path class="line" d="M640 200 H740"/><text class="label" x="675" y="188">1 : N</text>
+  <path class="line" d="M520 270 V390"/><text class="label" x="530" y="335">1 : N</text>
+  <path class="line" d="M300 470 H400"/><text class="label" x="330" y="458">1 : N</text>
+
+  <g class="card" transform="translate(60 130)">
+    <rect class="entity" width="240" height="140"/>
+    <path class="head" d="M12 0h216a12 12 0 0 1 12 12v32H0V12A12 12 0 0 1 12 0z"/>
+    <text class="name" x="18" y="29">CATEGORIA</text>
+    <text class="field" x="18" y="70">PK id</text><text class="field" x="18" y="96">nome (único)</text><text class="field" x="18" y="122">descricao</text>
+  </g>
+  <g class="card" transform="translate(400 130)">
+    <rect class="entity" width="240" height="140"/>
+    <path class="head" d="M12 0h216a12 12 0 0 1 12 12v32H0V12A12 12 0 0 1 12 0z"/>
+    <text class="name" x="18" y="29">LIVRO</text>
+    <text class="field" x="18" y="70">PK id</text><text class="field" x="18" y="96">FK categoria_id · ISBN único</text><text class="field" x="18" y="122">titulo · autor · exemplares</text>
+  </g>
+  <g class="card" transform="translate(740 130)">
+    <rect class="entity" width="240" height="140"/>
+    <path class="head" d="M12 0h216a12 12 0 0 1 12 12v32H0V12A12 12 0 0 1 12 0z"/>
+    <text class="name" x="18" y="29">EMPRESTIMO</text>
+    <text class="field" x="18" y="70">PK id · FK livro_id</text><text class="field" x="18" y="96">FK usuario_id</text><text class="field" x="18" y="122">datas · status · leitor</text>
+  </g>
+  <g class="card" transform="translate(400 390)">
+    <rect class="entity" width="240" height="140"/>
+    <path class="head" d="M12 0h216a12 12 0 0 1 12 12v32H0V12A12 12 0 0 1 12 0z"/>
+    <text class="name" x="18" y="29">USUARIO</text>
+    <text class="field" x="18" y="70">PK id</text><text class="field" x="18" y="96">nome · email (único)</text><text class="field" x="18" y="122">senha_hash · perfil · ativo</text>
+  </g>
+  <g transform="translate(60 565)">
+    <rect width="920" height="46" rx="8" fill="#e7efec"/>
+    <text x="18" y="29" fill="#234b43" font-family="Arial,sans-serif" font-size="14">Visão vw_livros_disponibilidade: consolida exemplares totais, empréstimos ativos e saldo disponível por livro.</text>
+  </g>
+</svg>
